@@ -39,6 +39,17 @@
                                     <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
                                         <div class="flex w-0 flex-1 items-center">
                                             <!-- Heroicon name: mini/paper-clip -->
+
+
+                                            @if (pathinfo($file, PATHINFO_EXTENSION) == 'jpg' || pathinfo($file,
+                                            PATHINFO_EXTENSION) == 'png' || pathinfo($file,
+                                            PATHINFO_EXTENSION) == 'jpeg' )
+                                            <div
+                                                class="relative w-full  h-80 cursor-pointer rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
+                                                <img src="{{ URL::to($file) }}" alt="requirement"
+                                                    class="w-full h-full object-center object-cover">
+                                            </div>
+                                            @else
                                             <svg class="h-5 w-5 flex-shrink-0 text-gray-400"
                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                 fill="currentColor" aria-hidden="true">
@@ -48,6 +59,7 @@
                                             </svg>
                                             <span class="ml-2 w-0 flex-1 truncate">{{ $activity->activity_name
                                                 }}</span>
+                                            @endif
                                         </div>
                                         <div class="ml-4 flex-shrink-0">
                                             <a href="/{{ $file }}" download="file"
@@ -59,12 +71,58 @@
                             </dd>
                         </div>
                         @endforeach
-
-
-
                     </dl>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        const lightbox = document.createElement("div");
+                                          lightbox.id = "lightbox";
+                                          document.body.appendChild(lightbox);
+
+                                          const images = document.querySelectorAll("img");
+                                          images.forEach((image) => {
+                                            image.addEventListener("click", (e) => {
+                                              lightbox.classList.add("active");
+                                              const img = document.createElement("img");
+                                              img.src = image.src;
+                                              while (lightbox.firstChild) {
+                                                lightbox.removeChild(lightbox.firstChild);
+                                              }
+                                              lightbox.appendChild(img);
+                                            });
+                                          });
+
+                                          lightbox.addEventListener("click", (e) => {
+                                            if (e.target !== e.currentTarget) return;
+                                            lightbox.classList.remove("active");
+                                          });
+    </script>
+    <style>
+        #lightbox {
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+        }
+
+        #lightbox.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #lightbox img {
+            width: 90%;
+            height: 30rem;
+            padding: 2px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
 </x-app-layout>
